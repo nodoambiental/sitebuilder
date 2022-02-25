@@ -28,3 +28,4 @@ mixin Tblock(blockName)
     const TTif = (condition, content) => `{% if ${condition} %}${content}{% endif %}`;
     const TTelif = (condition, ifcontent, elsecontent) => `{% if ${condition} %}${ifcontent}{% else %}${elsecontent}{% endif %}`;
     const Tdef = (definition) => `{% ${definition} %}`;
+    const Textend = (file) => `{% extends "${file}" %}`;
