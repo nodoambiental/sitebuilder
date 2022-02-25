@@ -29,10 +29,23 @@ const config = {
                 );
             },
         }),
+
         new HtmlWebpackPlugin({
             template: "src/templates/index.pug",
             filename: "templates/index.html",
             chunks: ["index"],
+        }),
+
+        new HtmlWebpackPlugin({
+            template: "src/templates/list.pug",
+            filename: "templates/list.html",
+            chunks: ["list"],
+        }),
+
+        new HtmlWebpackPlugin({
+            template: "src/templates/404.pug",
+            filename: "templates/404.html",
+            chunks: ["404"],
         }),
 
         new CopyWebpackPlugin({
@@ -87,3 +100,5 @@ module.exports = () => {
     }
     return config;
 };
+
+// TODO Add some magic to automatically injet the HtmlWebpackPlugin for each .pug file
