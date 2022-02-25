@@ -5,7 +5,7 @@ description = "A choccytheme, for a choccyblog in a choccymilk. Choccywoah."
 default_language = "en"
 generate_feed = true
 minify_html = true
-output_dir = "../zola/"
+output_dir = "../dist/"
 
 [markdown]
   highlight_code = true
