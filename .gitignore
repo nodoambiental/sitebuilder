@@ -2,4 +2,5 @@
 public
 node_modules
 coverage
-build/webpack/
+build/zola/
+util/*.js
