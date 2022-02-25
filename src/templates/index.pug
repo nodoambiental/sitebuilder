@@ -5,6 +5,7 @@ include ../util/classes.pug
 // Components
 include ../components/navbar.pug
 include ../components/head.pug
+include ../components/misc.pug
 
 // Definitions
 != Tdef(`set bundle = get_url(path="bundle.js")`)
@@ -16,7 +17,7 @@ html(lang = "en")
     body 
         header
             +navbar
-            hr
+            +hr
         main
             +Tblock("content")
     script(src = T_unsafe("bundle"))
