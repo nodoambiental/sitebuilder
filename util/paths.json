@@ -11,7 +11,7 @@
         "file": "bundle"
     },
     "bundle": {
-        "path": "build/webpack/bundle.js",
-        "out": "build/webpack/static/bundle.js"
+        "path": "build/zola/bundle.js",
+        "out": "build/zola/static/bundle.js"
     }
 }
