@@ -1,0 +1,13 @@
+include navbar/search.pug
+include navbar/badgeDropdown.pug
+
+mixin navbar
+    nav(class=CSS("nav"))
+        div(class="flex-1")
+            +Tfor("config.extra.choccy_nav", "link")
+                a(class=CSS("navButton"), href = T("link.path"))
+                    = T("link.name")
+        div(class="flex-none gap-2")
+            +search 
+            +badgeDropdown
+        
