@@ -1,11 +1,11 @@
 // Utilities
-include ../util/tera.pug
-include ../util/classes.pug
+include ../util/tera
+include ../util/classes
 
 // Components
-include ../components/navbar.pug
-include ../components/head.pug
-include ../components/misc.pug
+include ../components/navbar
+include ../components/head
+include ../components/base
 
 // Definitions
 != Tdef(`set bundle = get_url(path="bundle.js")`)
@@ -17,7 +17,7 @@ html(lang = "en")
     body 
         header
             +navbar
-            +hr
         main
+            +hr
             +Tblock("content")
     script(src = T_unsafe("bundle"))

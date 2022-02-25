@@ -1,5 +1,4 @@
-include navbar/search.pug
-include navbar/badgeDropdown.pug
+include base
 
 mixin navbar
     nav(class=CSS("nav"))
@@ -9,5 +8,14 @@ mixin navbar
                     = T("link.name")
         div(class="flex-none gap-2")
             +search 
-            +badgeDropdown
+            +avatarDropdown("https://api.lorem.space/image/face?hash=33791")
+                li
+                    a(class="justify-between") Potat 
+                        span(class="badge badge-success") Tasty!
+                li
+                    a(class="justify-between") Candy 
+                        span(class="badge badge-info") Sour!
+                li
+                    a(class="justify-between") Candy
+                        span(class="badge badge-error") Sad :(
         
