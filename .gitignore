@@ -2,5 +2,7 @@
 public
 node_modules
 coverage
-build/
-util/*.js
+target/
+temp/
+data/
+.vscode/
