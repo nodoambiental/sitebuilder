@@ -1,0 +1,4 @@
+assets = "https://github.com/nodoambiental/site.assets.git"
+source = "https://github.com/nodoambiental/site.source.git"
+content = "https://github.com/nodoambiental/site.content.git"
+data = "https://github.com/nodoambiental/site.data.git"

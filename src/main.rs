@@ -74,7 +74,7 @@ fn main() {
         )
         .subcommand(
             Command::new("update")
-                .about("Pulls the data, content and assets from the remote repository.")
+                .about("Pulls the data, sourec, content and assets from the remote repositories.")
                 .arg(Arg::new("content")
                     .short('c')
                     .long("content")
@@ -87,8 +87,16 @@ fn main() {
                     .short('a')
                     .long("assets")
                     .help("Set this flag to only pull assets"))
+                .arg(Arg::new("source")
+                    .short('s')
+                    .long("source")
+                    .help("Set this flag to only pull and build the source"))
+                .arg(Arg::new("dependencies")
+                    .short('i')
+                    .long("install")
+                    .help("Set this flag to only install dependencies"))
                 .after_help(
-                    "By default, this command will pull all the data, content and assets from the remote repositories.",
+                    "By default, this command will pull all the data, content, source and assets from the remote repositories, and install the required dependencies.",
                 ),
         )
         .arg(
