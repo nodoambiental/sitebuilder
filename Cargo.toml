@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 git2 = "0.14.2"
+clap = { version = "3.1.6", features = ["derive"] }
+slog = "2.7.0"
