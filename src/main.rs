@@ -4,6 +4,7 @@ use clap;
 use std::process;
 
 mod build;
+mod clean;
 mod update;
 mod util;
 
@@ -20,6 +21,11 @@ fn run(cli: clap::ArgMatches) -> Result<(), String> {
             // TODO
             // Build the project
             //build::build(sub_m)
+        }
+        Some(("clean", sub_m)) => {
+            // TODO
+            // Clean the project
+            //clean::clean(sub_m)
         }
         _ => panic!("[ERROR] No subcommand was specified"),
     }
@@ -43,12 +49,20 @@ fn main() {
                     clap::Arg::new("development")
                         .short('D')
                         .long("development")
+                        .takes_value(false)
                         .help("Performs a development build"),
+                )
+                .arg(
+                    clap::Arg::new("output")
+                        .short('o')
+                        .long("output")
+                        .takes_value(true)
+                        .help("Set a custom output directory. Defaults to /dist"),
                 ),
         )
         .subcommand(
             clap::Command::new("update")
-                .about("Pulls the data, sourec, content and assets from the remote repositories.")
+                .about("Pulls the data, source, content and assets from the remote repositories.")
                 .arg(clap::Arg::new("content")
                     .short('c')
                     .long("content")
@@ -76,6 +90,23 @@ fn main() {
                     .help("Set this flag to only install dependencies"))
                 .after_help(
                     "By default, this command will pull all the data, content, source and assets from the remote repositories, and install the required dependencies.",
+                ),
+        )
+        .subcommand(
+            clap::Command::new("clean")
+                .about("Cleans generated/pulled files")
+                .arg(clap::Arg::new("pulled")
+                    .short('p')
+                    .long("pulled")
+                    .takes_value(false)
+                    .help("Set this flag to clear pulled folders"))
+                .arg(clap::Arg::new("generated")
+                    .short('g')
+                    .long("generated")
+                    .takes_value(false)
+                    .help("Set this flag to clear generated folders"))
+                .after_help(
+                    "By default, this command will clean nothing, specify what to clear using the corresponding flags.",
                 ),
         )
         .arg(
