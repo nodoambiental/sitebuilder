@@ -653,6 +653,7 @@ dependencies = [
  "config",
  "git2",
  "slog",
+ "termcolor",
 ]
 
 [[package]]
