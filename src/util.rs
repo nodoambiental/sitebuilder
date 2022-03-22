@@ -1,37 +1,63 @@
 use config;
 use std::io::Write;
-use std::{env, fs, io, path};
+use std::{env, fs, io, path, process};
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
-pub fn stdout(selector: &str, message: &str) -> Result<(), io::Error> {
+pub fn stdout(selector: &str, message: &str) {
     // TODO implement debug level selection
     let mut out = StandardStream::stdout(ColorChoice::Always);
+    // TODO implement IO error handling
     match selector {
         "info" => {
             out.set_color(ColorSpec::new().set_fg(Some(Color::Cyan)));
-            writeln!(out, "{}", message)?;
-            out.reset()?;
+            writeln!(out, "{}", message);
+            out.reset();
         }
         "error" => {
             out.set_color(ColorSpec::new().set_fg(Some(Color::Red)).set_intense(true));
-            writeln!(out, "{}", message)?;
-            out.reset()?;
+            writeln!(out, "{}", message);
+            out.reset();
         }
         "warning" => {
             out.set_color(ColorSpec::new().set_fg(Some(Color::Yellow)));
-            writeln!(out, "{}", message)?;
-            out.reset()?;
+            writeln!(out, "{}", message);
+            out.reset();
         }
         "success" => {
             out.set_color(ColorSpec::new().set_fg(Some(Color::Green)));
-            writeln!(out, "{}", message)?;
-            out.reset()?;
+            writeln!(out, "{}", message);
+            out.reset();
         }
         _ => {
-            out.reset()?;
+            out.reset();
         }
     }
-    Ok(())
+}
+
+pub fn call_with_stdout(
+    exit_code: Result<process::ExitStatus, io::Error>,
+    start_message: &str,
+    success_message: &str,
+    error_message: &str,
+) -> bool {
+    stdout("info", start_message);
+
+    // TODO Learn more about this guard please
+    let exit_code = match exit_code {
+        Ok(code) => code,
+        Err(error) => {
+            stdout("error", &format!("{}", error));
+            return false;
+        }
+    };
+
+    if exit_code.success() {
+        stdout("success", success_message);
+        return true;
+    } else {
+        stdout("error", error_message);
+        return false;
+    }
 }
 
 pub fn cwd_string() -> String {
