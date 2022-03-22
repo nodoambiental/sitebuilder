@@ -36,12 +36,9 @@ pub fn stdout(selector: &str, message: &str) {
 
 pub fn call_with_stdout(
     exit_code: Result<process::ExitStatus, io::Error>,
-    start_message: &str,
     success_message: &str,
     error_message: &str,
 ) -> bool {
-    stdout("info", start_message);
-
     // TODO Learn more about this guard please
     let exit_code = match exit_code {
         Ok(code) => code,
@@ -85,21 +82,37 @@ pub fn delete_reldir(rel_path: &str) -> Result<(), io::Error> {
     Ok(())
 }
 
-pub fn verify_reldir(rel_path: &str) -> io::Result<bool> {
-    let mut path = env::current_dir()?;
+pub fn verify_reldir(rel_path: &str) -> bool {
+    let mut path = env::current_dir().unwrap();
     path.push(rel_path);
-    let metadata = fs::metadata(path)?;
-    Ok(metadata.is_dir())
+    let metadata = fs::metadata(path);
+    // TODO Learn more about this guard please
+    let metadata = match metadata {
+        Ok(meta) => meta,
+        Err(error) => {
+            stdout("error", &format!("{}", error));
+            return false;
+        }
+    };
+    metadata.is_dir()
 }
 
-pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> io::Result<bool> {
+pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> bool {
     let mut fullpath = path::PathBuf::new();
     fullpath.push(cwd_string());
     fullpath.push(rel_path);
     fullpath.push(name);
     fullpath.set_extension(ext);
-    let metadata = fs::metadata(fullpath.to_str().unwrap())?;
-    Ok(metadata.is_file())
+    let metadata = fs::metadata(fullpath.to_str().unwrap());
+    // TODO Learn more about this guard please
+    let metadata = match metadata {
+        Ok(meta) => meta,
+        Err(error) => {
+            stdout("error", &format!("{}", error));
+            return false;
+        }
+    };
+    metadata.is_file()
 }
 
 pub fn read_config() -> Result<config::Config, config::ConfigError> {
