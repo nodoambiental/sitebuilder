@@ -4,36 +4,66 @@ use git2;
 use std::{fs, io, process};
 
 pub fn update(sub_match: &clap::ArgMatches) {
-    // TODO
+    // TODO massage those warnings
+    // TODO add proper error handling
     if sub_match.is_present("install") {
-        util::stdout("info", "Starting Node dependencies installation...");
-        // TODO do something with the error code
-        let exit_code = node_install();
-
-        // TODO Learn more about this guard please
-        let exit_code = match exit_code {
-            Ok(code) => code,
-            Err(error) => {
-                util::stdout("error", &format!("{}", error));
-                return;
-            }
-        };
-
-        if exit_code.success() {
-            util::stdout("success", "Node dependencies installed.");
-        } else {
-            util::stdout("error", "Node dependencies failed to install.");
-        }
-
-        // TODO print a "installation finished" message
+        util::call_with_stdout(
+            node_install(),
+            "Starting Node dependencies installation...",
+            "Node dependencies installed.",
+            "Node dependencies failed to install.",
+        );
     }
-    // TODO replace this assignments for matches
-    let content = sub_match.is_present("content");
-    let source = sub_match.is_present("source");
-    let assets = sub_match.is_present("assets");
-    let data = sub_match.is_present("data");
 
-    // TODO add a case for no matches and do everything
+    let mut empty_flag = true;
+
+    if sub_match.is_present("content") {
+        empty_flag = false;
+        run_update("content");
+    }
+
+    if sub_match.is_present("source") {
+        empty_flag = false;
+        run_update("source");
+    }
+
+    if sub_match.is_present("assets") {
+        empty_flag = false;
+        run_update("assets");
+    }
+
+    if sub_match.is_present("data") {
+        empty_flag = false;
+        run_update("data");
+    }
+
+    if empty_flag {
+        run_update("content");
+        run_update("assets");
+        run_update("data");
+        run_update("source");
+        util::call_with_stdout(
+            node_install(),
+            "Starting Node dependencies installation...",
+            "Node dependencies installed.",
+            "Node dependencies failed to install.",
+        );
+    }
+}
+
+fn run_update(target: &str) -> Result<(), io::Error> {
+    // TODO Handle error here and return only ()
+    // Verify the `source` directory exists
+    let source_exists = util::verify_reldir(target).unwrap();
+    if source_exists {
+        // TODO
+        // pull(target);
+    } else {
+        // TODO
+        // clone(target);
+    }
+    // HACK add error handling
+    Ok(())
 }
 
 pub fn pull(repo_uri: &str) {
