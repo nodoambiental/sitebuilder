@@ -1,5 +1,38 @@
 use config;
+use std::io::Write;
 use std::{env, fs, io, path};
+use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+
+pub fn stdout(selector: &str, message: &str) -> Result<(), io::Error> {
+    // TODO implement debug level selection
+    let mut out = StandardStream::stdout(ColorChoice::Always);
+    match selector {
+        "info" => {
+            out.set_color(ColorSpec::new().set_fg(Some(Color::Cyan)));
+            writeln!(out, "{}", message)?;
+            out.reset()?;
+        }
+        "error" => {
+            out.set_color(ColorSpec::new().set_fg(Some(Color::Red)).set_intense(true));
+            writeln!(out, "{}", message)?;
+            out.reset()?;
+        }
+        "warning" => {
+            out.set_color(ColorSpec::new().set_fg(Some(Color::Yellow)));
+            writeln!(out, "{}", message)?;
+            out.reset()?;
+        }
+        "success" => {
+            out.set_color(ColorSpec::new().set_fg(Some(Color::Green)));
+            writeln!(out, "{}", message)?;
+            out.reset()?;
+        }
+        _ => {
+            out.reset()?;
+        }
+    }
+    Ok(())
+}
 
 pub fn cwd_string() -> String {
     env::current_dir()
