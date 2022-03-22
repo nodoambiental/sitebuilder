@@ -102,9 +102,27 @@ pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> io::Result<bool>
     Ok(metadata.is_file())
 }
 
-pub fn read_config(config_path: &str) -> Result<(), io::Error> {
-    // TODO
+pub fn read_config() -> Result<config::Config, config::ConfigError> {
+    // load and return the config
+    let config = config::Config::builder()
+        .add_source(config::File::new("sitebuilder", config::FileFormat::Toml))
+        .build();
+    return config;
+}
 
-    // HACK add error handling
-    Ok(())
+pub fn read_config_custom(config_path: &str) -> Result<config::Config, config::ConfigError> {
+    // Check if a custom path is set and build the PathBuf
+    let mut path = path::PathBuf::new();
+
+    path.push(config_path);
+    path.push("sitebuilder");
+
+    // load and return the config
+    let config = config::Config::builder()
+        .add_source(config::File::new(
+            path.to_str().unwrap(),
+            config::FileFormat::Toml,
+        ))
+        .build();
+    return config;
 }
