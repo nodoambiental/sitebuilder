@@ -25,7 +25,7 @@ fn run(cli: clap::ArgMatches) -> Result<(), String> {
         Some(("clean", sub_m)) => {
             // TODO
             // Clean the project
-            //clean::clean(sub_m)
+            clean::clean(sub_m)
         }
         _ => panic!("[ERROR] No subcommand was specified"),
     }
@@ -95,16 +95,45 @@ fn main() {
         .subcommand(
             clap::Command::new("clean")
                 .about("Cleans generated/pulled files")
-                .arg(clap::Arg::new("pulled")
+                .arg_required_else_help(true)
+                .subcommand(
+                    clap::Command::new("pulled")
+                        .about("Selectively cleans pulled files")
+                        .arg_required_else_help(true)
+                        .arg(clap::Arg::new("content")
+                            .short('c')
+                            .long("content")
+                            .takes_value(false)
+                            .help("Set this flag to only clean pulled content."))
+                        .arg(clap::Arg::new("data")
+                            .short('d')
+                            .long("data")
+                            .takes_value(false)
+                            .help("Set this flag to only clean pulled data"))
+                        .arg(clap::Arg::new("assets")
+                            .short('a')
+                            .long("assets")
+                            .takes_value(false)
+                            .help("Set this flag to only clean pulled assets"))
+                        .arg(clap::Arg::new("source")
+                            .short('s')
+                            .long("source")
+                            .takes_value(false)
+                            .help("Set this flag to only clean pulled and build the source"))
+                        .after_help(
+                            "By default, this command will clean nothing, specify what to clear using the corresponding flags.",
+                        ),
+                )
+                .arg(clap::Arg::new("pulled_all")
                     .short('p')
                     .long("pulled")
                     .takes_value(false)
-                    .help("Set this flag to clear pulled folders"))
+                    .help("Set this flag to clean all pulled files"))
                 .arg(clap::Arg::new("generated")
                     .short('g')
                     .long("generated")
                     .takes_value(false)
-                    .help("Set this flag to clear generated folders"))
+                    .help("Set this flag to clean generated files"))
                 .after_help(
                     "By default, this command will clean nothing, specify what to clear using the corresponding flags.",
                 ),
