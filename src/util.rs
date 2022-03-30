@@ -106,10 +106,7 @@ pub fn verify_reldir(rel_path: &str) -> bool {
         Err(_error) => {
             stdout(
                 "warning",
-                &format!(
-                    "Directory {} does not exist in the current folder.",
-                    rel_path.italic()
-                ),
+                &format!("Directory {} does not exist", rel_path.italic()),
             );
             return false;
         }
@@ -201,7 +198,7 @@ pub fn get_outdir(config: &config::Config, sub_match: &clap::ArgMatches) -> Stri
         Ok(out) => out,
         Err(error) => {
             outdir_in_config = false;
-            stdout("Warning", "No output directory specified on config file.");
+            stdout("warning", "No output directory specified on config file.");
             String::from("")
         }
     };
