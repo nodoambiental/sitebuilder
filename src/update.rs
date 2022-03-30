@@ -21,8 +21,8 @@ pub fn update(sub_match: &clap::ArgMatches) {
         util::stdout("info", "Starting Node dependencies installation...");
         util::call_with_stdout(
             node_install(),
-            "Node dependencies installed.",
-            "Node dependencies failed to install.",
+            "Node dependencies installed",
+            "Node dependencies failed to install",
         );
     }
 
@@ -54,8 +54,8 @@ pub fn update(sub_match: &clap::ArgMatches) {
         util::stdout("info", "Starting Node dependencies installation...");
         util::call_with_stdout(
             node_install(),
-            "Node dependencies installed.",
-            "Node dependencies failed to install.",
+            "Node dependencies installed",
+            "Node dependencies failed to install",
         );
     }
 }
@@ -68,14 +68,14 @@ fn run_update(config: &config::Config, target: &str) -> Result<(), io::Error> {
         util::stdout("info", format!("Pulling {}...", target).as_str());
         util::call_with_stdout(
             pull(target),
-            format!("{} pulled.", target).as_str(),
+            format!("{} pulled", target).as_str(),
             format!("{} pull failed. :(", target).as_str(),
         );
     } else {
         util::stdout("info", format!("Cloning {}...", target).as_str());
         util::call_with_stdout(
             clone(config.get_string(target).unwrap().as_str(), target),
-            format!("{} cloned.", target).as_str(),
+            format!("{} cloned", target).as_str(),
             format!("{} cloning failed. :(", target).as_str(),
         );
     }

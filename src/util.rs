@@ -138,7 +138,7 @@ pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> bool {
             stdout(
                 "warning",
                 &format!(
-                    "File {}.{} does not exist in the {} folder.",
+                    "File {}.{} does not exist in the {} folder",
                     name.italic(),
                     ext.italic(),
                     rel_path.italic()
@@ -198,7 +198,7 @@ pub fn get_outdir(config: &config::Config, sub_match: &clap::ArgMatches) -> Stri
         Ok(out) => out,
         Err(error) => {
             outdir_in_config = false;
-            stdout("warning", "No output directory specified on config file.");
+            stdout("warning", "No output directory specified on config file");
             String::from("")
         }
     };
@@ -217,7 +217,7 @@ pub fn get_outdir(config: &config::Config, sub_match: &clap::ArgMatches) -> Stri
                 if outdir_in_config {
                     return parsed_outdir.to_string();
                 } else {
-                    stdout("error", "There is no custom output path either in the config file or the CLI. If you don't want to use a custom outdir, omit this flag to use the default.");
+                    stdout("error", "There is no custom output path either in the config file or the CLI. If you don't want to use a custom outdir, omit this flag to use the default");
                     stdout(
                         "fatal",
                         "This should not happen, apparently there is a bug! Sad :(",

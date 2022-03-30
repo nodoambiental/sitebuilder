@@ -21,35 +21,35 @@ pub fn clean(sub_match: &clap::ArgMatches) {
                 util::stdout("info", "Cleaning content...");
                 util::call_with_stdout(
                     clean_sources("content"),
-                    "Cleaned content files.",
-                    "Failed to clean content files.",
+                    "Cleaned content files",
+                    "Failed to clean content files",
                 );
             }
             if sub_sub_match.is_present("source") {
                 util::stdout("info", "Cleaning source...");
                 util::call_with_stdout(
                     clean_sources("source"),
-                    "Cleaned source files.",
-                    "Failed to clean source files.",
+                    "Cleaned source files",
+                    "Failed to clean source files",
                 );
             }
             if sub_sub_match.is_present("assets") {
                 util::stdout("info", "Cleaning assets...");
                 util::call_with_stdout(
                     clean_sources("assets"),
-                    "Cleaned assets.",
-                    "Failed to clean assets.",
+                    "Cleaned assets",
+                    "Failed to clean assets",
                 );
             }
             if sub_sub_match.is_present("data") {
                 util::stdout("info", "Cleaning data...");
                 util::call_with_stdout(
                     clean_sources("data"),
-                    "Cleaned data files.",
-                    "Failed to clean data files.",
+                    "Cleaned data files",
+                    "Failed to clean data files",
                 );
             }
-            util::stdout("info", "...sources cleaning done.");
+            util::stdout("info", "...sources cleaning done");
         }
         Some(("generated", sub_sub_match)) => {
             util::stdout("info", "Cleaning generated files...");
@@ -57,14 +57,14 @@ pub fn clean(sub_match: &clap::ArgMatches) {
             if sub_sub_match.is_present("output") {
                 util::call_with_stdout(
                     clean_generated(parsed_outdir.as_str()),
-                    "Cleaned generated files.",
-                    "Failed to clean generated files.",
+                    "Cleaned generated files",
+                    "Failed to clean generated files",
                 );
             } else {
                 util::call_with_stdout(
                     clean_generated(parsed_outdir.as_str()),
-                    "Cleaned generated files.",
-                    "Failed to clean generated files.",
+                    "Cleaned generated files",
+                    "Failed to clean generated files",
                 );
             }
         }
@@ -76,29 +76,29 @@ pub fn clean(sub_match: &clap::ArgMatches) {
 
         util::call_with_stdout(
             clean_sources("content"),
-            "Cleaned content files.",
-            "Failed to clean content files.",
+            "Cleaned content files",
+            "Failed to clean content files",
         );
         util::stdout("info", "Cleaning source...");
         util::call_with_stdout(
             clean_sources("source"),
-            "Cleaned source files.",
-            "Failed to clean source files.",
+            "Cleaned source files",
+            "Failed to clean source files",
         );
         util::stdout("info", "Cleaning assets...");
         util::call_with_stdout(
             clean_sources("assets"),
-            "Cleaned assets.",
-            "Failed to clean assets.",
+            "Cleaned assets",
+            "Failed to clean assets",
         );
         util::stdout("info", "Cleaning data...");
         util::call_with_stdout(
             clean_sources("data"),
-            "Cleaned data files.",
-            "Failed to clean data files.",
+            "Cleaned data files",
+            "Failed to clean data files",
         );
 
-        util::stdout("info", "...sources cleaning done.");
+        util::stdout("info", "...sources cleaning done");
     }
 }
 
@@ -128,7 +128,7 @@ pub fn clean_generated(outdir: &str) -> Result<process::ExitStatus, io::Error> {
     let source_exists = util::verify_reldir(outdir);
 
     if !source_exists {
-        util::stdout("warning", "Output folder not found, nothing to clean.");
+        util::stdout("warning", "Output folder not found, nothing to clean");
         return Ok(std::os::unix::process::ExitStatusExt::from_raw(0));
     }
 

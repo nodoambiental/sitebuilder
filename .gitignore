@@ -5,4 +5,7 @@ coverage
 target/
 temp/
 data/
+assets/
+source/
+content/
 .vscode/
