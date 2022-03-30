@@ -1,35 +1,39 @@
+use colored::*;
 use config;
 use std::io::Write;
 use std::{env, fs, io, path, process};
-use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
 pub fn stdout(selector: &str, message: &str) {
     // TODO implement debug level selection
-    let mut out = StandardStream::stdout(ColorChoice::Always);
     // TODO implement IO error handling
+    // TODO Only add [SiteBuilder] if verbose is on
     match selector {
         "info" => {
-            out.set_color(ColorSpec::new().set_fg(Some(Color::Cyan)));
-            writeln!(out, "{}", message);
-            out.reset();
+            println!(
+                "{} {}",
+                "[SiteBuilder]".bright_blue().bold(),
+                message.bright_blue()
+            );
         }
         "error" => {
-            out.set_color(ColorSpec::new().set_fg(Some(Color::Red)).set_intense(true));
-            writeln!(out, "{}", message);
-            out.reset();
+            println!(
+                "{} {}",
+                "[SiteBuilder]".bright_red().bold(),
+                message.bright_red().bold()
+            );
         }
         "warning" => {
-            out.set_color(ColorSpec::new().set_fg(Some(Color::Yellow)));
-            writeln!(out, "{}", message);
-            out.reset();
+            println!("{} {}", "[SiteBuilder]".yellow().bold(), message.yellow());
         }
         "success" => {
-            out.set_color(ColorSpec::new().set_fg(Some(Color::Green)));
-            writeln!(out, "{}", message);
-            out.reset();
+            println!(
+                "{} {}",
+                "[SiteBuilder]".bright_green().bold(),
+                message.bright_green()
+            );
         }
         _ => {
-            out.reset();
+            println!("{} {}", "[SiteBuilder]".normal().bold(), message.normal());
         }
     }
 }
@@ -39,7 +43,6 @@ pub fn call_with_stdout(
     success_message: &str,
     error_message: &str,
 ) -> bool {
-    // TODO Learn more about this guard please
     let exit_code = match exit_code {
         Ok(code) => code,
         Err(error) => {
