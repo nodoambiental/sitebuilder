@@ -85,10 +85,11 @@ fn run_update(config: &config::Config, target: &str) -> Result<(), io::Error> {
 
 pub fn pull(target: &str) -> Result<process::ExitStatus, io::Error> {
     // Verify git config file exists in repo
-    let is_git_repo = util::verify_relfile((String::from(target) + "/.git").as_str(), "config", "");
-    assert!(
-        matches!(is_git_repo, true),
-        "[FS] The target folder is not a git repository"
+    util::verify_relfile_fatal(
+        (String::from(target) + "/.git").as_str(),
+        "config",
+        "",
+        format!("{} folder does not seem like a Git repository", target).as_str(),
     );
 
     // Pull repo
@@ -138,17 +139,13 @@ pub fn node_install() -> Result<process::ExitStatus, io::Error> {
     // TODO improve error handling and not just panic senselessly
 
     // Verify the `source` directory exists
-    let source_exists = util::verify_reldir("source");
-    assert!(
-        matches!(source_exists, true),
-        "[FS] Source folder does not exist"
-    );
-
+    util::verify_reldir_fatal("source", "Try pulling the source data first");
     // Verify package.json exists
-    let package_exists = util::verify_relfile("source", "package", "json");
-    assert!(
-        matches!(package_exists, true),
-        "[FS] There is no package.json file in the source folder"
+    util::verify_relfile_fatal(
+        "source",
+        "package",
+        "json",
+        "Cannot install dependencies without a package.json file",
     );
 
     // Install modules
