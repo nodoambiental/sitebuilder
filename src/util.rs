@@ -15,6 +15,15 @@ pub fn stdout(selector: &str, message: &str) {
                 message.bright_blue()
             );
         }
+        "fatal" => {
+            println!(
+                "{} {} {}",
+                "[SiteBuilder]".bright_red().bold(),
+                "[Fatal]".bright_purple().bold(),
+                message.bright_red().bold()
+            );
+            process::exit(1);
+        }
         "error" => {
             println!(
                 "{} {}",
@@ -71,6 +80,7 @@ pub fn cwd_string() -> String {
 pub fn create_reldir(rel_path: &str) -> Result<(), io::Error> {
     let temp_path: path::PathBuf = [cwd_string(), String::from(rel_path)].iter().collect();
 
+    // HACK add error handling
     fs::create_dir_all(temp_path).unwrap();
 
     // HACK add error handling
@@ -79,6 +89,7 @@ pub fn create_reldir(rel_path: &str) -> Result<(), io::Error> {
 
 pub fn delete_reldir(rel_path: &str) -> Result<(), io::Error> {
     let temp_path: path::PathBuf = [cwd_string(), String::from(rel_path)].iter().collect();
+    // HACK add error handling
     fs::remove_dir(temp_path).unwrap();
 
     // HACK add error handling
@@ -92,12 +103,27 @@ pub fn verify_reldir(rel_path: &str) -> bool {
     // TODO Learn more about this guard please
     let metadata = match metadata {
         Ok(meta) => meta,
-        Err(error) => {
-            stdout("error", &format!("{}", error));
+        Err(_error) => {
+            stdout(
+                "warning",
+                &format!(
+                    "Directory {} does not exist in the current folder.",
+                    rel_path.italic()
+                ),
+            );
             return false;
         }
     };
     metadata.is_dir()
+}
+
+pub fn verify_reldir_fatal(rel_path: &str, error_message: &str) -> bool {
+    if verify_reldir(rel_path) {
+        return true;
+    } else {
+        stdout("fatal", error_message);
+        return false;
+    }
 }
 
 pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> bool {
@@ -110,12 +136,30 @@ pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> bool {
     // TODO Learn more about this guard please
     let metadata = match metadata {
         Ok(meta) => meta,
-        Err(error) => {
-            stdout("error", &format!("{}", error));
+        Err(_error) => {
+            // TODO format properly
+            stdout(
+                "warning",
+                &format!(
+                    "File {}.{} does not exist in the {} folder.",
+                    name.italic(),
+                    ext.italic(),
+                    rel_path.italic()
+                ),
+            );
             return false;
         }
     };
     metadata.is_file()
+}
+
+pub fn verify_relfile_fatal(rel_path: &str, name: &str, ext: &str, error_message: &str) -> bool {
+    if verify_relfile(rel_path, name, ext) {
+        return true;
+    } else {
+        stdout("fatal", error_message);
+        return false;
+    }
 }
 
 pub fn read_config() -> Result<config::Config, config::ConfigError> {
@@ -141,4 +185,56 @@ pub fn read_config_custom(config_path: &str) -> Result<config::Config, config::C
         ))
         .build();
     return config;
+}
+
+pub fn get_outdir(config: &config::Config, sub_match: &clap::ArgMatches) -> String {
+    // HACK add error handling
+    let config = read_config().unwrap();
+
+    let outdir = config.get_string("output");
+
+    let mut outdir_in_config = true;
+    let mut outdir_in_cli = true;
+    let mut parsed_outdir = "dist";
+
+    let config_parsed_outdir = match outdir {
+        Ok(out) => out,
+        Err(error) => {
+            outdir_in_config = false;
+            stdout("Warning", "No output directory specified on config file.");
+            String::from("")
+        }
+    };
+
+    if outdir_in_config {
+        parsed_outdir = config_parsed_outdir.as_str();
+    }
+
+    if sub_match.is_present("output") {
+        let cli_outdir = sub_match.value_of("output");
+
+        let cli_parsed_outdir = match cli_outdir {
+            Some(out) => out,
+            None => {
+                outdir_in_cli = false;
+                if outdir_in_config {
+                    return parsed_outdir.to_string();
+                } else {
+                    stdout("error", "There is no custom output path either in the config file or the CLI. If you don't want to use a custom outdir, omit this flag to use the default.");
+                    stdout(
+                        "fatal",
+                        "This should not happen, apparently there is a bug! Sad :(",
+                    );
+                    panic!("Well hi there, I'm a panic!");
+                }
+            }
+        };
+        if outdir_in_cli {
+            // Cli specification takes precendence over config file one
+            parsed_outdir = cli_parsed_outdir;
+        } else {
+            stdout("Warning", "No output directory specified on CLI");
+        }
+    }
+    return parsed_outdir.to_string();
 }
