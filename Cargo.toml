@@ -1,13 +1,23 @@
 [package]
 name = "sitebuilder"
-version = "0.2.0"
+version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Agata Ordano <aordano@protonmail.com>"]
+license = "MIT"
+description = "Utility that builds a reactive, interactive, full blown site from a static template"
+repository = "https://github.com/nodoambiental/sitebuilder"
+readme = "README.md"
+license-file = "LICENSE"
+keywords = ["pug", "jade", "template", "tooling", "jamstack", "zola"]
+categories = ["command-line-utilities", "web-programming"]
 
 [dependencies]
 clap = { version = "3.1.6", features = ["derive"] }
 slog = "2.7.0"
 config = "0.12.0"
-termcolor = "1.1"
+colored = "2.0.0"
 man = "0.3.0"
+pug = "0.1.10"
+
+[fetures]
+dumb_terminal = ["colored/no-color"]
