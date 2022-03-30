@@ -1,16 +1,18 @@
 // TODO Docs
 use super::util;
 use config;
+use std::process::ExitStatus;
 use std::{fs, io, path, process};
 
 pub fn clean(sub_match: &clap::ArgMatches) {
     // TODO massage those warnings
     // TODO add proper error handling
     // TODO implement custom config path option
+    // TODO add an option to only delete intermediary files and not final distribution files
 
     // HACK add error handling
-    // TODO Handle usage
-    let _config = util::read_config().unwrap();
+
+    let config = util::read_config().unwrap();
 
     match sub_match.subcommand() {
         Some(("pulled", sub_sub_match)) => {
@@ -49,6 +51,23 @@ pub fn clean(sub_match: &clap::ArgMatches) {
             }
             util::stdout("info", "...sources cleaning done.");
         }
+        Some(("generated", sub_sub_match)) => {
+            util::stdout("info", "Cleaning generated files...");
+            let parsed_outdir = util::get_outdir(&config, sub_sub_match);
+            if sub_sub_match.is_present("output") {
+                util::call_with_stdout(
+                    clean_generated(parsed_outdir.as_str()),
+                    "Cleaned generated files.",
+                    "Failed to clean generated files.",
+                );
+            } else {
+                util::call_with_stdout(
+                    clean_generated(parsed_outdir.as_str()),
+                    "Cleaned generated files.",
+                    "Failed to clean generated files.",
+                );
+            }
+        }
         _ => {}
     }
 
@@ -81,15 +100,6 @@ pub fn clean(sub_match: &clap::ArgMatches) {
 
         util::stdout("info", "...sources cleaning done.");
     }
-
-    if sub_match.is_present("generated") {
-        util::stdout("info", "Cleaning generated files...");
-        util::call_with_stdout(
-            clean_generated(),
-            "Cleaned generated files.",
-            "Failed to clean generated files.",
-        );
-    }
 }
 
 fn clean_sources(folder_name: &str) -> Result<process::ExitStatus, io::Error> {
@@ -113,24 +123,21 @@ fn clean_sources(folder_name: &str) -> Result<process::ExitStatus, io::Error> {
     return code;
 }
 
-pub fn clean_generated() -> Result<process::ExitStatus, io::Error> {
+pub fn clean_generated(outdir: &str) -> Result<process::ExitStatus, io::Error> {
     // Verify the `source` directory exists
-    let source_exists = util::verify_reldir("build");
-    assert!(
-        matches!(source_exists, true),
-        "[FS] build folder does not exist"
-    );
+    let source_exists = util::verify_reldir(outdir);
 
-    let target: path::PathBuf = [util::cwd_string(), String::from("build")].iter().collect();
+    if !source_exists {
+        util::stdout("warning", "Output folder not found, nothing to clean.");
+        return Ok(std::os::unix::process::ExitStatusExt::from_raw(0));
+    }
 
-    // Install modules
-    // TODO hide this depending on verbosity level
+    let target: path::PathBuf = [util::cwd_string(), String::from(outdir)].iter().collect();
 
     //let code = process::Command::new("echo")
     let code = process::Command::new("rm")
         .arg("-rfd")
-        .arg(target.to_str().unwrap())
-        .stdout(process::Stdio::inherit())
+        .arg(outdir)
         .spawn()
         .expect("[FS] ")
         .wait();

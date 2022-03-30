@@ -114,17 +114,24 @@ fn main() {
                         .after_help(
                             "By default, this command will clean nothing, specify what to clear using the corresponding flags.",
                         ),
+                ).subcommand(
+                    clap::Command::new("generated")
+                        .about("Clean generated files")
+                        .arg(clap::Arg::new("output")
+                            .short('o')
+                            .long("output")
+                            .takes_value(true)
+                            .help("Set this flag to specify output folder."))
+                            .after_help("Select a custom output directory. Defaults to /dist.\nIf this flag contains no path, it will be looked for in the config file.\nIf the config file contains a key for custom output directory, this option will be ignored and the dir weill be always used.")
+                        .after_help(
+                            "By default, this command will clean using the output specified in the config file or default to dist, specify what to clear using the corresponding flags.",
+                        ),
                 )
                 .arg(clap::Arg::new("pulled_all")
                     .short('p')
                     .long("pulled")
                     .takes_value(false)
                     .help("Set this flag to clean all pulled files"))
-                .arg(clap::Arg::new("generated")
-                    .short('g')
-                    .long("generated")
-                    .takes_value(false)
-                    .help("Set this flag to clean generated files"))
                 .after_help(
                     "By default, this command will clean nothing, specify what to clear using the corresponding flags.",
                 ),
@@ -136,8 +143,8 @@ fn main() {
                 .help("Sets the level of verbosity"),
         )
         .get_matches();
-    if let Err(e) = run(matches) {
-        println!("Application error: {}", e);
+    if let Err(error) = run(matches) {
+        println!("Application error: {}", error);
         process::exit(1);
     }
 }
