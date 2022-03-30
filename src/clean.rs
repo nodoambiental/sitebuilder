@@ -19,8 +19,8 @@ pub fn clean(sub_match: &clap::ArgMatches) {
                 util::stdout("info", "Cleaning content...");
                 util::call_with_stdout(
                     clean_sources("content"),
-                    "Cleaned source content files.",
-                    "Failed to clean source content files.",
+                    "Cleaned content files.",
+                    "Failed to clean content files.",
                 );
             }
             if sub_sub_match.is_present("source") {
@@ -35,16 +35,16 @@ pub fn clean(sub_match: &clap::ArgMatches) {
                 util::stdout("info", "Cleaning assets...");
                 util::call_with_stdout(
                     clean_sources("assets"),
-                    "Cleaned source asset files.",
-                    "Failed to clean source asset files.",
+                    "Cleaned assets.",
+                    "Failed to clean assets.",
                 );
             }
             if sub_sub_match.is_present("data") {
                 util::stdout("info", "Cleaning data...");
                 util::call_with_stdout(
                     clean_sources("data"),
-                    "Cleaned source data files.",
-                    "Failed to clean source data files.",
+                    "Cleaned data files.",
+                    "Failed to clean data files.",
                 );
             }
             util::stdout("info", "...sources cleaning done.");
@@ -57,8 +57,8 @@ pub fn clean(sub_match: &clap::ArgMatches) {
 
         util::call_with_stdout(
             clean_sources("content"),
-            "Cleaned source content files.",
-            "Failed to clean source content files.",
+            "Cleaned content files.",
+            "Failed to clean content files.",
         );
         util::stdout("info", "Cleaning source...");
         util::call_with_stdout(
@@ -69,14 +69,14 @@ pub fn clean(sub_match: &clap::ArgMatches) {
         util::stdout("info", "Cleaning assets...");
         util::call_with_stdout(
             clean_sources("assets"),
-            "Cleaned source asset files.",
-            "Failed to clean source asset files.",
+            "Cleaned assets.",
+            "Failed to clean assets.",
         );
         util::stdout("info", "Cleaning data...");
         util::call_with_stdout(
             clean_sources("data"),
-            "Cleaned source data files.",
-            "Failed to clean source data files.",
+            "Cleaned data files.",
+            "Failed to clean data files.",
         );
 
         util::stdout("info", "...sources cleaning done.");
@@ -110,7 +110,6 @@ fn clean_sources(folder_name: &str) -> Result<process::ExitStatus, io::Error> {
         .spawn()
         .expect("[FS] ")
         .wait();
-
     return code;
 }
 
@@ -131,9 +130,9 @@ fn clean_generated() -> Result<process::ExitStatus, io::Error> {
     let code = process::Command::new("rm")
         .arg("-rfd")
         .arg(target.to_str().unwrap())
+        .stdout(process::Stdio::inherit())
         .spawn()
         .expect("[FS] ")
         .wait();
-
     return code;
 }

@@ -12,22 +12,12 @@ fn run(cli: clap::ArgMatches) -> Result<(), String> {
     // TODO do stuff
 
     match cli.subcommand() {
-        Some(("update", sub_m)) => {
-            // TODO
-            // Update the project
-            update::update(sub_m)
-        }
-        Some(("build", sub_m)) => {
-            // TODO
-            // Build the project
-            //build::build(sub_m)
-        }
-        Some(("clean", sub_m)) => {
-            // TODO
-            // Clean the project
-            clean::clean(sub_m)
-        }
-        _ => panic!("[ERROR] No subcommand was specified"),
+        Some(("update", sub_m)) => update::update(sub_m),
+        Some(("build", sub_m)) => build::build(sub_m),
+        Some(("clean", sub_m)) => clean::clean(sub_m),
+        _ => panic!(
+            "I before E, except when your foreign neighbor Keith received eight counterfeit  beige sleights  from feisty caffeinated  weightlifters. Weird."
+        ),
     }
     // HACK add error handling
     Ok(())
@@ -35,7 +25,7 @@ fn run(cli: clap::ArgMatches) -> Result<(), String> {
 
 fn main() {
     let matches = clap::Command::new("sitebuilder")
-        .version("0.2.0")
+        .version("0.1.0")
         .author("Ágata Ordano")
         .arg_required_else_help(true)
         .about("Builds a reactive, interactive, full blown site from a static template")
@@ -57,7 +47,7 @@ fn main() {
                         .short('o')
                         .long("output")
                         .takes_value(true)
-                        .help("Set a custom output directory. Defaults to /dist"),
+                        .help("Set a custom output directory. Defaults to /dist.\nIf this flag contains no path, it will be looked for in the config file.\nIf the config file contains a key for custom output directory, this option will be ignored and the dir weill be always used."),
                 ),
         )
         .subcommand(

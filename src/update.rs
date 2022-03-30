@@ -112,7 +112,6 @@ pub fn pull(target: &str) -> Result<process::ExitStatus, io::Error> {
             .spawn()
             .expect("[Git] ")
             .wait();
-
         return code_second;
     }
     return code_first;
@@ -132,13 +131,10 @@ pub fn clone(repo_uri: &str, target: &str) -> Result<process::ExitStatus, io::Er
         .spawn()
         .expect("[Git] ")
         .wait();
-
     return code;
 }
 
 pub fn node_install() -> Result<process::ExitStatus, io::Error> {
-    // TODO add color to the CLI output
-
     // TODO improve error handling and not just panic senselessly
 
     // Verify the `source` directory exists
@@ -163,6 +159,5 @@ pub fn node_install() -> Result<process::ExitStatus, io::Error> {
         .spawn()
         .expect("[NPM] ")
         .wait();
-
     return code;
 }
