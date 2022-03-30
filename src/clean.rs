@@ -113,7 +113,7 @@ fn clean_sources(folder_name: &str) -> Result<process::ExitStatus, io::Error> {
     return code;
 }
 
-fn clean_generated() -> Result<process::ExitStatus, io::Error> {
+pub fn clean_generated() -> Result<process::ExitStatus, io::Error> {
     // Verify the `source` directory exists
     let source_exists = util::verify_reldir("build");
     assert!(

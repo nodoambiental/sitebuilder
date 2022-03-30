@@ -29,6 +29,7 @@ fn main() {
         .author("Ágata Ordano")
         .arg_required_else_help(true)
         .about("Builds a reactive, interactive, full blown site from a static template")
+        // TODO Add option to skip cleanup on build
         .subcommand(
             clap::Command::new("build")
                 .about("Executes the build process.")
