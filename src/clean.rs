@@ -1,5 +1,6 @@
 // TODO Docs
 use super::util;
+use colored::*;
 use config;
 use std::process::ExitStatus;
 use std::{fs, io, path, process};
@@ -128,7 +129,14 @@ pub fn clean_generated(outdir: &str) -> Result<process::ExitStatus, io::Error> {
     let source_exists = util::verify_reldir(outdir);
 
     if !source_exists {
-        util::stdout("warning", "Output folder not found, nothing to clean");
+        util::stdout(
+            "warning",
+            format!(
+                "Generated folder {} not found, nothing to clean",
+                outdir.italic()
+            )
+            .as_str(),
+        );
         return Ok(std::os::unix::process::ExitStatusExt::from_raw(0));
     }
 
