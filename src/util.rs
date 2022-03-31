@@ -159,6 +159,52 @@ pub fn verify_relfile_fatal(rel_path: &str, name: &str, ext: &str, error_message
     }
 }
 
+pub fn symbolic_link_reldir(
+    rel_source: &str,
+    rel_target: &str,
+    build_dir: &str,
+) -> Result<(), io::Error> {
+    let abs_source: path::PathBuf = [cwd_string(), String::from(rel_source)].iter().collect();
+    let abs_build_dir: path::PathBuf = [
+        cwd_string(),
+        String::from(build_dir),
+        String::from(rel_target),
+    ]
+    .iter()
+    .collect();
+    // HACK add error handling
+    std::os::unix::fs::symlink(abs_source, abs_build_dir).unwrap();
+
+    // HACK add error handling
+    Ok(())
+}
+
+pub fn symbolic_link_relfile(
+    rel_source_dir: &str,
+    name: &str,
+    ext: &str,
+    build_dir: &str,
+) -> Result<(), io::Error> {
+    let mut abs_source = path::PathBuf::new();
+    abs_source.push(cwd_string());
+    abs_source.push(rel_source_dir);
+    abs_source.push(name);
+    abs_source.set_extension(ext);
+
+    let mut abs_target = path::PathBuf::new();
+    abs_target.push(cwd_string());
+    abs_target.push(build_dir);
+    abs_target.push(rel_source_dir);
+    abs_target.push(name);
+    abs_target.set_extension(ext);
+
+    // HACK add error handling
+    std::os::unix::fs::symlink(abs_source, abs_target).unwrap();
+
+    // HACK add error handling
+    Ok(())
+}
+
 pub fn read_config() -> Result<config::Config, config::ConfigError> {
     // load and return the config
     let config = config::Config::builder()
