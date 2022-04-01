@@ -105,7 +105,7 @@ pub fn clean(sub_match: &clap::ArgMatches) {
 
 fn clean_sources(folder_name: &str) -> Result<process::ExitStatus, io::Error> {
     // Verify the `source` directory exists
-    let source_exists = util::verify_reldir(folder_name);
+    let source_exists = util::verify_reldir(folder_name, true);
     assert!(matches!(source_exists, true), "{}", folder_name);
 
     let target: path::PathBuf = [util::cwd_string(), String::from(folder_name)]
@@ -126,7 +126,7 @@ fn clean_sources(folder_name: &str) -> Result<process::ExitStatus, io::Error> {
 
 pub fn clean_generated(outdir: &str) -> Result<process::ExitStatus, io::Error> {
     // Verify the `source` directory exists
-    let source_exists = util::verify_reldir(outdir);
+    let source_exists = util::verify_reldir(outdir, true);
 
     if !source_exists {
         util::stdout(

@@ -96,7 +96,7 @@ pub fn delete_reldir(rel_path: &str) -> Result<(), io::Error> {
     Ok(())
 }
 
-pub fn verify_reldir(rel_path: &str) -> bool {
+pub fn verify_reldir(rel_path: &str, should_exist: bool) -> bool {
     let mut path = env::current_dir().unwrap();
     path.push(rel_path);
     let metadata = fs::metadata(path);
@@ -111,11 +111,16 @@ pub fn verify_reldir(rel_path: &str) -> bool {
             return false;
         }
     };
-    metadata.is_dir()
+
+    if should_exist {
+        metadata.is_dir()
+    } else {
+        !metadata.is_dir()
+    }
 }
 
-pub fn verify_reldir_fatal(rel_path: &str, error_message: &str) -> bool {
-    if verify_reldir(rel_path) {
+pub fn verify_reldir_fatal(rel_path: &str, should_exist: bool, error_message: &str) -> bool {
+    if verify_reldir(rel_path, should_exist) {
         return true;
     } else {
         stdout("fatal", error_message);
@@ -123,7 +128,7 @@ pub fn verify_reldir_fatal(rel_path: &str, error_message: &str) -> bool {
     }
 }
 
-pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> bool {
+pub fn verify_relfile(rel_path: &str, name: &str, ext: &str, should_exist: bool) -> bool {
     let mut fullpath = path::PathBuf::new();
     fullpath.push(cwd_string());
     fullpath.push(rel_path);
@@ -147,11 +152,22 @@ pub fn verify_relfile(rel_path: &str, name: &str, ext: &str) -> bool {
             return false;
         }
     };
-    metadata.is_file()
+
+    if should_exist {
+        metadata.is_file()
+    } else {
+        !metadata.is_file()
+    }
 }
 
-pub fn verify_relfile_fatal(rel_path: &str, name: &str, ext: &str, error_message: &str) -> bool {
-    if verify_relfile(rel_path, name, ext) {
+pub fn verify_relfile_fatal(
+    rel_path: &str,
+    name: &str,
+    ext: &str,
+    should_exist: bool,
+    error_message: &str,
+) -> bool {
+    if verify_relfile(rel_path, name, ext, should_exist) {
         return true;
     } else {
         stdout("fatal", error_message);

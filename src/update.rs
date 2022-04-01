@@ -63,7 +63,7 @@ pub fn update(sub_match: &clap::ArgMatches) {
 fn run_update(config: &config::Config, target: &str) -> Result<(), io::Error> {
     // TODO Handle error here and return only ()
     // Verify the `source` directory exists
-    let source_exists = util::verify_reldir(target);
+    let source_exists = util::verify_reldir(target, true);
     if source_exists {
         util::stdout("info", format!("Pulling {}...", target).as_str());
         util::call_with_stdout(
@@ -89,6 +89,7 @@ pub fn pull(target: &str) -> Result<process::ExitStatus, io::Error> {
         (String::from(target) + "/.git").as_str(),
         "config",
         "",
+        true,
         format!("{} folder does not seem like a Git repository", target).as_str(),
     );
 
@@ -139,12 +140,13 @@ pub fn node_install() -> Result<process::ExitStatus, io::Error> {
     // TODO improve error handling and not just panic senselessly
 
     // Verify the `source` directory exists
-    util::verify_reldir_fatal("source", "Try pulling the source data first");
+    util::verify_reldir_fatal("source", true, "Try pulling the source data first");
     // Verify package.json exists
     util::verify_relfile_fatal(
         "source",
         "package",
         "json",
+        true,
         "Cannot install dependencies without a package.json file",
     );
 
