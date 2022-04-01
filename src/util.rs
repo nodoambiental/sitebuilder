@@ -200,6 +200,7 @@ pub fn symbolic_link_relfile(
     name: &str,
     ext: &str,
     build_dir: &str,
+    rel_target_dir: &str,
 ) -> Result<(), io::Error> {
     let mut abs_source = path::PathBuf::new();
     abs_source.push(cwd_string());
@@ -210,7 +211,7 @@ pub fn symbolic_link_relfile(
     let mut abs_target = path::PathBuf::new();
     abs_target.push(cwd_string());
     abs_target.push(build_dir);
-    abs_target.push(rel_source_dir);
+    abs_target.push(rel_target_dir);
     abs_target.push(name);
     abs_target.set_extension(ext);
 
