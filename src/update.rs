@@ -121,15 +121,16 @@ pub fn pull(target: &str) -> Result<process::ExitStatus, io::Error> {
 
 pub fn clone(repo_uri: &str, target: &str) -> Result<process::ExitStatus, io::Error> {
     // Add target dir
-    util::create_reldir(target);
+    // util::create_reldir(target);
 
     // Clone repo
     // TODO hide this depending on verbosity level
     let code = process::Command::new("git")
-        .arg("clone")
+        .arg("submodule")
+        .arg("add")
         .arg(repo_uri)
-        .arg(".")
-        .current_dir(util::cwd_string() + "/" + target)
+        .arg(format!("./{}", target).as_str())
+        .current_dir(util::cwd_string())
         .spawn()
         .expect("[Git] ")
         .wait();
