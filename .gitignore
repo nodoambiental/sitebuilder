@@ -9,3 +9,4 @@ assets/
 source/
 content/
 .vscode/
+zola_build/
