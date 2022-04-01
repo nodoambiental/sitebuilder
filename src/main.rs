@@ -5,6 +5,7 @@ use std::process;
 
 mod build;
 mod clean;
+mod init;
 mod update;
 mod util;
 
@@ -14,9 +15,10 @@ fn run(cli: clap::ArgMatches) -> Result<(), String> {
     match cli.subcommand() {
         Some(("update", sub_m)) => update::update(sub_m),
         Some(("build", sub_m)) => build::build(sub_m),
+        Some(("init", sub_m)) => init::init(sub_m),
         Some(("clean", sub_m)) => clean::clean(sub_m),
         _ => panic!(
-            "I before E, except when your foreign neighbor Keith received eight counterfeit  beige sleights  from feisty caffeinated  weightlifters. Weird."
+            "I before E, except when your foreign neighbor Keith received eight counterfeit beige sleights from feisty caffeinated weightlifters. Weird."
         ),
     }
     // HACK add error handling
@@ -50,6 +52,13 @@ fn main() {
                         .takes_value(true)
                         .help("Set a custom output directory. Defaults to /dist.\nIf this flag contains no path, it will be looked for in the config file.\nIf the config file contains a key for custom output directory, this option will be ignored and the dir weill be always used."),
                 ),
+        )
+        .subcommand(
+            clap::Command::new("init")
+                .about("Initializes a new sitebuilder project")
+                .after_help(
+                    "This command will add a template to initialize a new project.",
+                )
         )
         .subcommand(
             clap::Command::new("update")
