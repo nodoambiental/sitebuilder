@@ -29,6 +29,8 @@ pub fn init(_sub_match: &clap::ArgMatches) {
 
     // HACK add error handling
     fs::write(path, content);
+
+    util::stdout("success", "Config template added.")
 }
 
 fn option_line(option: &str) -> String {

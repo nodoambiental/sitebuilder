@@ -149,7 +149,12 @@ pub fn verify_relfile(rel_path: &str, name: &str, ext: &str, should_exist: bool)
                     rel_path.italic()
                 ),
             );
-            return false;
+
+            if should_exist {
+                return false;
+            } else {
+                return true;
+            }
         }
     };
 
